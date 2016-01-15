@@ -9,7 +9,7 @@
 FROM appcontainers/apache:ubuntu_15.10
 
 # File Author / Maintainer
-MAINTAINER Mathias Åsberg mathias@whatbox.se
+MAINTAINER Mohammad Ghaffari mg@barsavanet.ir
 
 ###################################################################
 #****  Reset Apache CTN  
@@ -44,7 +44,7 @@ ENV MYSQL_DB wordpress
 ENV APP_USER admin
 ENV APP_PASS PAssw0rd
 ENV WP_KEY "Check us out at www.appcontainers.com"
-[8:22:00 PM] Mathias Åsberg: ###################################################################
+###################################################################
 #  ADD REQUIRED APP FILES  ****
 ###################################################################
 
