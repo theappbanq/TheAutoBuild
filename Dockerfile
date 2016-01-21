@@ -78,12 +78,12 @@ RUN a2enmod env ssl rewrite php5
 COPY wordpress/* /var/www/html/
 RUN chown -R www-data:www-data /var/www
 # Copy the WP-Config file
-RUN cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
-RUN sed -i -e "s/define('DB_NAME', 'database_name_here')/define('DB_NAME', '$MYSQL_DB')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
-RUN sed -i -e "s/define('DB_USER', 'username_here')/define('DB_USER', '$MYSQL_USER')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
-RUN sed -i -e "s/define('DB_PASSWORD', 'password_here')/define('DB_PASSWORD', '$MYSQL_PASS')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
-RUN sed -i -e "s/define('DB_HOST', 'localhost')/define('DB_HOST', '$MYSQL_SERVER')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
-RUN sed -i -e "s/put your unique phrase here/$WP_KEY/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
+RUN cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+RUN sed -i -e "s/define('DB_NAME', 'database_name_here')/define('DB_NAME', '$MYSQL_DB')/g" /var/www/html/wp-config.php
+RUN sed -i -e "s/define('DB_USER', 'username_here')/define('DB_USER', '$MYSQL_USER')/g" /var/www/html/wp-config.php
+RUN sed -i -e "s/define('DB_PASSWORD', 'password_here')/define('DB_PASSWORD', '$MYSQL_PASS')/g" /var/www/html/wp-config.php
+RUN sed -i -e "s/define('DB_HOST', 'localhost')/define('DB_HOST', '$MYSQL_SERVER')/g" /var/www/html/wp-config.php
+RUN sed -i -e "s/put your unique phrase here/$WP_KEY/g" /var/www/html/wp-config.php
 
 ###################################################################
 #  POST DEPLOY CLEAN UP  ******
