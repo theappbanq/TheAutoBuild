@@ -57,7 +57,7 @@ ADD README.md /tmp/
 RUN apt-get clean all && \
 apt-get -y update && \
 DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
-DEBIAN_FRONTEND=noninteractive apt-get -y install php5 php5-cli php5-common php5-mysql mysql-client-5.6 mysql-common mysql-server-5.6 unzip wget && \
+DEBIAN_FRONTEND=noninteractive apt-get -y install php5 php5-cli php5-common php5-mysql unzip wget git && \
 apt-get clean && \
 rm -fr /var/lib/apt/lists/*
 
@@ -74,13 +74,16 @@ RUN a2enmod env ssl rewrite php5
 #  APPLICATION INSTALL  *****
 ###################################################################
 
-# Grab the latest Wordpress, install it and remove the zip file
-RUN wget -P /var/www/html/ https://wordpress.org/latest.zip && \
-unzip /var/www/html/latest.zip -d /var/www/html/ && \
-rm -fr /var/www/html/latest.zip
-
+# Copy WordPress dir from git to the www folder
+COPY wordpress/* /var/www/html/
+RUN chown -R www-data:www-data /var/www
 # Copy the WP-Config file
 RUN cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+RUN sed -i -e "s/define('DB_NAME', 'database_name_here')/define('DB_NAME', '$MYSQL_DB')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
+RUN sed -i -e "s/define('DB_USER', 'username_here')/define('DB_USER', '$MYSQL_USER')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
+RUN sed -i -e "s/define('DB_PASSWORD', 'password_here')/define('DB_PASSWORD', '$MYSQL_PASS')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
+RUN sed -i -e "s/define('DB_HOST', 'localhost')/define('DB_HOST', '$MYSQL_SERVER')/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
+RUN sed -i -e "s/put your unique phrase here/$WP_KEY/g" /var/www/html/wordpress/wp-config.php > /var/www/html/wordpress/wp-config.php
 
 ###################################################################
 #  POST DEPLOY CLEAN UP  ******
