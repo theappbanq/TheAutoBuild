@@ -36,7 +36,7 @@ ENV TERMTAG wordpress
 ENV MODE standalone
 ENV APP_NAME wordpress.local
 ENV APACHE_SVRALIAS www.wordpress.local localhost
-ENV MYSQL_SERVER $MYSQL_PORT_3306_TCP_ADDR
+ENV MYSQL_SERVER db-local
 ENV MYSQL_CLIENT localhost
 ENV MYSQL_USER root
 ENV MYSQL_PASS PAssw0rd
