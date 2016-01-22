@@ -75,8 +75,7 @@ COPY configs/apache-vh.conf /etc/apache2/sites-available/wordpress.local.conf
 ###################################################################
 
 # Copy WordPress dir from git to the www folder
-COPY wordpress/* /var/www/html/
-RUN chown -R www-data:www-data /var/www
+ADD wordpress/ /var/www/html/
 # Copy the WP-Config file
 RUN cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
 RUN sed -i -e "s/define('DB_NAME', 'database_name_here')/define('DB_NAME', '$MYSQL_DB')/g" /var/www/html/wp-config.php
@@ -84,6 +83,7 @@ RUN sed -i -e "s/define('DB_USER', 'username_here')/define('DB_USER', '$MYSQL_US
 RUN sed -i -e "s/define('DB_PASSWORD', 'password_here')/define('DB_PASSWORD', '$MYSQL_PASS')/g" /var/www/html/wp-config.php
 RUN sed -i -e "s/define('DB_HOST', 'localhost')/define('DB_HOST', '$MYSQL_SERVER')/g" /var/www/html/wp-config.php
 RUN sed -i -e "s/put your unique phrase here/$WP_KEY/g" /var/www/html/wp-config.php
+RUN chown -R www-data:www-data /var/www
 
 ###################################################################
 #  POST DEPLOY CLEAN UP  ******
