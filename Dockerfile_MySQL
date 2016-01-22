@@ -6,7 +6,7 @@
 ############################################################
 
 # Set the base image to MySQL latest Base
-FROM mysql/latest
+FROM mysql:latest
 
 # File Author / Maintainer
 MAINTAINER Mohammad Ghaffari mg@barsavanet.ir
