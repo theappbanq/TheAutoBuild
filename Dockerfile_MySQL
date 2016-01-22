@@ -1,0 +1,15 @@
+###########################################################
+# Dockerfile to build Wordpress Base Container
+# Based on: appcontainers/apache:ubuntu
+# DATE: 01/23/2016
+# COPYRIGHT: GPL
+############################################################
+
+# Set the base image to MySQL latest Base
+FROM mysql/latest
+
+# File Author / Maintainer
+MAINTAINER Mohammad Ghaffari mg@barsavanet.ir
+
+ADD db-backups/wp-back.sql /docker-entrypoint-initdb.d
+
