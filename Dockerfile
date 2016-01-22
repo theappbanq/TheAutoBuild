@@ -68,7 +68,7 @@ for x in `ls /usr/share/i18n/locales/ | grep -v en_`; do rm -fr /usr/share/i18n/
 # Enable the mod_env module and headers
 RUN a2enmod env ssl rewrite php5
 # ln -s /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/
-
+COPY configs/apache-vh.conf /etc/apache2/sites-available/wordpress.local.conf
 
 ###################################################################
 #  APPLICATION INSTALL  *****
