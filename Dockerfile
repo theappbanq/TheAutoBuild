@@ -11,38 +11,6 @@ FROM ubuntu:latest
 MAINTAINER Mohammad Ghaffari mg@barsavanet.ir
 
 ###################################################################
-#****  Reset Apache CTN  
-###################################################################
-
-# This section will handle undoing any install magic that the apache base container did on setup.
-RUN rm -fr /etc/apache2/sites-available/apache_deb.conf && \
-rm -fr /var/www/*; mkdir -p /var/www/html && \
-rm -fr /tmp/install.log && \
-chown -R www-data:www-data /var/www/html && \
-ls -lah /var/www
-
-###################################################################
-#  APP VERSIONS  
-###################################################################
-
-
-###################################################################
-#  OVERRIDE ENABLED ENV VARIABLES  **
-###################################################################
-
-ENV MYSQL_SERVER db-local
-ENV MYSQL_CLIENT localhost
-ENV MYSQL_USER root
-ENV MYSQL_PASS PAssw0rd
-ENV MYSQL_DB wordpress
-ENV WP_KEY "Check us out at www.appcontainers.com"
-###################################################################
-#  ADD REQUIRED APP FILES  ****
-###################################################################
-
-ADD README.md /tmp/
-
-###################################################################
 #  UPDATES & PRE-REQS  ******
 ###################################################################
 
@@ -61,6 +29,33 @@ for x in `ls /usr/share/i18n/locales/ | grep -v en_`; do rm -fr /usr/share/i18n/
 RUN a2enmod env ssl rewrite php5
 RUN ln -s /etc/apache2/sites-available/wordpress.local.conf /etc/apache2/sites-enabled/wordpress.local.conf
 COPY configs/apache-vh.conf /etc/apache2/sites-available/wordpress.local.conf
+
+###################################################################
+#  OVERRIDE ENABLED ENV VARIABLES  **
+###################################################################
+
+ENV MYSQL_SERVER db-local
+ENV MYSQL_CLIENT localhost
+ENV MYSQL_USER root
+ENV MYSQL_PASS PAssw0rd
+ENV MYSQL_DB wordpress
+ENV WP_KEY "Check us out at www.appcontainers.com"
+###################################################################
+#  ADD REQUIRED APP FILES  ****
+###################################################################
+
+ADD README.md /tmp/
+
+###################################################################
+#****  Reset Apache CTN
+###################################################################
+
+# This section will handle undoing any install magic that the apache base container did on setup.
+RUN rm -fr /etc/apache2/sites-available/apache_deb.conf && \
+rm -fr /var/www/*; mkdir -p /var/www/html && \
+rm -fr /tmp/install.log && \
+chown -R www-data:www-data /var/www/html && \
+ls -lah /var/www
 
 ###################################################################
 #  APPLICATION INSTALL  *****
