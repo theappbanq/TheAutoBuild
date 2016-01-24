@@ -1,12 +1,11 @@
 ###########################################################
 # Dockerfile to build Wordpress Base Container
-# Based on: appcontainers/apache:ubuntu
-# DATE: 08/31/2015
-# COPYRIGHT: Appcontainers.com
+# Based on: ubuntu:latest
+# DATE: 01/24/2016
 ############################################################
 
-# Set the base image to Ubuntu 15.10 Base
-FROM appcontainers/apache:ubuntu_15.10
+# Set the base image to Ubuntu 14.04 latest
+FROM ubuntu:latest
 
 # File Author / Maintainer
 MAINTAINER Mohammad Ghaffari mg@barsavanet.ir
@@ -31,18 +30,11 @@ ls -lah /var/www
 #  OVERRIDE ENABLED ENV VARIABLES  **
 ###################################################################
 
-ENV ENV dev
-ENV TERMTAG wordpress
-ENV MODE standalone
-ENV APP_NAME wordpress.local
-ENV APACHE_SVRALIAS www.wordpress.local localhost
 ENV MYSQL_SERVER db-local
 ENV MYSQL_CLIENT localhost
 ENV MYSQL_USER root
 ENV MYSQL_PASS PAssw0rd
 ENV MYSQL_DB wordpress
-ENV APP_USER admin
-ENV APP_PASS PAssw0rd
 ENV WP_KEY "Check us out at www.appcontainers.com"
 ###################################################################
 #  ADD REQUIRED APP FILES  ****
@@ -57,7 +49,7 @@ ADD README.md /tmp/
 RUN apt-get clean all && \
 apt-get -y update && \
 DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
-DEBIAN_FRONTEND=noninteractive apt-get -y install php5 php5-cli php5-common php5-mysql unzip wget git && \
+DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 apache2-utils php5 php5-cli php5-common php5-mysql unzip wget git && \
 apt-get clean && \
 rm -fr /var/lib/apt/lists/*
 
@@ -67,7 +59,7 @@ for x in `ls /usr/share/i18n/locales/ | grep -v en_`; do rm -fr /usr/share/i18n/
 
 # Enable the mod_env module and headers
 RUN a2enmod env ssl rewrite php5
-# ln -s /etc/apache2/mods-available/headers.load /etc/apache2/mods-enabled/
+RUN ln -s /etc/apache2/sites-available/wordpress.local.conf /etc/apache2/sites-enabled/wordpress.local.conf
 COPY configs/apache-vh.conf /etc/apache2/sites-available/wordpress.local.conf
 
 ###################################################################
@@ -95,15 +87,6 @@ RUN service apache2 stop
 ###################################################################
 #  CONFIGURE START ITEMS  *******
 ###################################################################
-
-# Add Database Scripts, and Runconfig
-# ADD runconfig.sh /tmp/.runconfig.sh
-# ADD mysql_setup.sql /tmp/.mysql_setup.sql
-
-# Set boot items
-# RUN chmod +x /tmp/.runconfig.sh && \
-# echo "/tmp/./.runconfig.sh" >> /root/.bashrc && \
-# echo "[ -f /tmp/.runconfig.sh ] && rm -fr /tmp/.runconfig.sh" >> /root/.bashrc
 
 # Set up Data Volume and Set docker run command.
 CMD /bin/bash -c "service apache2 stop && /usr/sbin/apache2ctl -D FOREGROUND"
